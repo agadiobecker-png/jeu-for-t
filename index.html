@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le voyage de Gouttelette à Dieppe | Eco2 Nature</title>
+  <meta name="description" content="Jeu éducatif interactif sur le cycle de l'eau et la biodiversité de Dieppe pour élèves de CM2 - Eco2 Nature." />
+  <meta property="og:title" content="Le voyage de Gouttelette à Dieppe | Eco2 Nature" />
+  <meta property="og:description" content="Jeu éducatif interactif sur le cycle de l'eau et la biodiversité de Dieppe pour élèves de CM2 - Eco2 Nature." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-dark: #070b14;
+      --bg-surface: #0e1626;
+      --bg-surface-elevated: #162036;
+      --border-color: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      --cyan-bright: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.35);
+      --emerald-bright: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.35);
+      --indigo-bright: #818cf8;
+      --indigo-glow: rgba(129, 140, 248, 0.35);
+      --amber-bright: #fbbf24;
+      --rose-bright: #f43f5e;
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    a, button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    button {
+      border: none;
+      background: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ==========================================================================
+       TOP BAR NAVIGATION CONTRACT
+       ========================================================================== */
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      padding: 0.85rem 1.5rem;
+      background: rgba(7, 11, 20, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-zone {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--cyan-bright);
+      box-shadow: 0 0 10px var(--cyan-bright);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-bottom: 2px;
+      transition: color 0.15s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--cyan-bright);
+    }
+
+    .nav-link.active {
+      border-bottom: 2px solid var(--cyan-bright);
+      font-weight: 600;
+    }
+
+    .action-zone {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .btn-audio {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-audio:hover {
+      border-color: var(--cyan-bright);
+      color: #fff;
+    }
+
+    .badge-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--cyan-bright);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       LAYOUT CONTAINER
+       ========================================================================== */
+    .app-main {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       HERO & HUB SCREEN
+       ========================================================================== */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 2.5rem;
+      align-items: center;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    .hero-kicker {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--cyan-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #38bdf8 0%, #a5f3fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      max-width: 34rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .input-name {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      color: #fff;
+      outline: none;
+      width: 100%;
+      max-width: 260px;
+      transition: border-color 0.15s;
+    }
+
+    .input-name:focus {
+      border-color: var(--cyan-bright);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #070b14;
+      background: linear-gradient(135deg, #38bdf8 0%, #7dd3fc 100%);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.6);
+    }
+
+    .mascot-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 1.25rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .mascot-visual {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 16px;
+      background: radial-gradient(circle at center, #0f2b48 0%, #071224 80%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .mascot-drop-svg {
+      width: 140px;
+      height: 180px;
+      filter: drop-shadow(0 0 24px rgba(56, 189, 248, 0.8));
+      animation: floatMascot 4s ease-in-out infinite;
+    }
+
+    @keyframes floatMascot {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    .mascot-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding: 0 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    /* Chapter Cards */
+    .section-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .chapters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chapter-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-banner {
+      height: 140px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-step-badge {
+      position: absolute;
+      top: 0.65rem;
+      left: 0.65rem;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      background: rgba(7, 11, 20, 0.85);
+      color: var(--cyan-bright);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .card-status {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      display: none;
+    }
+
+    .card-status.unlocked {
+      display: block;
+    }
+
+    .card-kicker {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.825rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-footer {
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .tools-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      padding: 1.5rem;
+      background: rgba(14, 22, 38, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+    }
+
+    @media (max-width: 800px) {
+      .tools-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tool-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tool-box:hover {
+      border-color: var(--cyan-bright);
+      transform: translateY(-2px);
+    }
+
+    .tool-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0.5rem 0 0.25rem;
+    }
+
+    .tool-desc {
+      font-size: 0.785rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       CHAPTER SCREENS & ARENAS
+       ========================================================================== */
+    .chapter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .step-pill-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.75rem;
+      border-radius: 10px;
+      color: var(--text-muted);
+    }
+
+    .game-arena-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .game-arena-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .arena-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .arena-photo-header {
+      height: 180px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .arena-photo-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 11, 20, 0.95), rgba(7, 11, 20, 0.2));
+    }
+
+    .arena-canvas-stage {
+      position: relative;
+      height: 380px;
+      width: 100%;
+      background: radial-gradient(circle at 50% 30%, #0d1e38 0%, #070e1c 100%);
+      overflow: hidden;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    .droplet-avatar {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 30;
+      transition: left 0.05s ease-out, top 0.05s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .droplet-core {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--cyan-bright);
+      box-shadow: 0 0 20px var(--cyan-bright);
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .droplet-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--cyan-bright);
+      background: rgba(7, 11, 20, 0.9);
+      padding: 0.1rem 0.4rem;
+      border-radius: 6px;
+      margin-top: 2px;
+      white-space: nowrap;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .hud-box {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(7, 11, 20, 0.88);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.75rem;
+      z-index: 20;
+      min-width: 170px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.35rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan-bright), #38bdf8);
+      width: 0%;
+      transition: width 0.15s ease;
+    }
+
+    .arena-overlay-msg {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 20, 0.92);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .side-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .deck-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      font-size: 0.825rem;
+    }
+
+    .deck-title {
+      font-size: 0.95rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .species-list-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .species-pill-btn {
+      padding: 0.55rem 0.75rem;
+      border-radius: 10px;
+      background: #090e1a;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      text-align: left;
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .species-pill-btn:hover {
+      border-color: var(--cyan-bright);
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       CYCLE DIAGRAM CANVAS & REVIEW
+       ========================================================================== */
+    .diagram-board {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      min-height: 480px;
+      background: #040812;
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      overflow: hidden;
+      margin: 1.5rem 0;
+      box-shadow: 0 24px 50px rgba(0,0,0,0.6);
+    }
+
+    .chips-tray {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      padding: 1.25rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-chip {
+      padding: 0.5rem 0.9rem;
+      border-radius: 10px;
+      background: #0b1324;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .step-chip.selected {
+      background: var(--cyan-bright);
+      color: #070b14;
+      border-color: var(--cyan-bright);
+      box-shadow: 0 0 16px var(--cyan-bright);
+      transform: scale(1.04);
+    }
+
+    .diagram-target {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      z-index: 20;
+      transition: transform 0.15s;
+    }
+
+    .target-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255, 255, 255, 0.4);
+      background: rgba(14, 22, 38, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #fff;
+      animation: pulseTarget 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseTarget {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    .target-validated {
+      background: rgba(7, 11, 20, 0.95);
+      border: 2px solid var(--cyan-bright);
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    /* ==========================================================================
+       DIPLOMA
+       ========================================================================== */
+    .diploma-frame {
+      position: relative;
+      background: radial-gradient(circle at center, #0e172a 0%, #060a14 100%);
+      border: 3px solid #334155;
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+      margin: 1.5rem 0;
+    }
+
+    .diploma-inner-border {
+      position: absolute;
+      inset: 12px;
+      border: 1px dashed rgba(56, 189, 248, 0.3);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .diploma-student-name {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      color: var(--cyan-bright);
+      margin: 1rem 0;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+
+    .diploma-badges-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 680px) {
+      .diploma-badges-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .diploma-badge-box {
+      background: rgba(14, 22, 38, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem 0.85rem;
+    }
+
+    .diploma-badge-box.earned {
+      border-color: var(--cyan-bright);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    /* Print Styles for Diploma */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .top-header, footer, .print-hide, .btn-audio, #confetti-canvas {
+        display: none !important;
+      }
+      .diploma-frame {
+        border: 4px solid #000 !important;
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 2cm !important;
+      }
+      .diploma-inner-border {
+        border-color: #666 !important;
+      }
+      .diploma-student-name {
+        color: #000 !important;
+        text-shadow: none !important;
+      }
+      .diploma-badge-box {
+        background: #f8fafc !important;
+        border: 1px solid #ccc !important;
+        color: #000 !important;
+      }
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 11, 20, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 2px solid var(--cyan-bright);
+      border-radius: 24px;
+      padding: 2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(56, 189, 248, 0.35);
+      position: relative;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Celebration Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ==========================================================================
+       TOP BAR (3 ZONES CONTRACT)
+       ========================================================================== -->
+  <header class="top-header">
+    <!-- Zone 1: Brand wordmark -->
+    <a href="#" class="brand-zone" onclick="switchScreen('hub')">
+      <span class="brand-dot"></span>
+      <span>Gouttelette à Dieppe</span>
+    </a>
+
+    <!-- Zone 2: 4-5 Navigation links -->
+    <nav class="nav-links">
+      <a href="#" class="nav-link active" id="nav-hub" onclick="switchScreen('hub')">Accueil</a>
+      <a href="#" class="nav-link" id="nav-c1" onclick="switchScreen('chapter1')">1. Platier Rocheux</a>
+      <a href="#" class="nav-link" id="nav-c2" onclick="switchScreen('chapter2')">2. Rivière l'Arques</a>
+      <a href="#" class="nav-link" id="nav-c3" onclick="switchScreen('chapter3')">3. La Manche</a>
+      <a href="#" class="nav-link" id="nav-diagram" onclick="switchScreen('diagram')">Schéma du Cycle</a>
+      <a href="#" class="nav-link" id="nav-diploma" onclick="switchScreen('diploma')">Diplôme</a>
+    </nav>
+
+    <!-- Zone 3: Primary Action (Audio Control & Badges) -->
+    <div class="action-zone">
+      <button class="btn-audio" id="audio-toggle-btn" onclick="toggleAudio()" title="Activer / Couper l'ambiance sonore">
+        <span id="audio-icon">🔊</span>
+        <span id="audio-label">Son Naturel</span>
+      </button>
+      <button class="badge-pill" onclick="switchScreen('diploma')" id="header-badge-count">
+        0 / 3 Badges
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       APP MAIN CONTENT SCREENS
+       ========================================================================== -->
+  <main class="app-main">
+
+    <!-- SCREEN: HUB / ACCUEIL -->
+    <section id="screen-hub" class="screen active">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-kicker">
+            <span>Eco2 Nature</span>
+            <span>·</span>
+            <span>Programme Sciences CM2</span>
+            <span>·</span>
+            <span>Dieppe</span>
+          </div>
+          <h1 class="hero-title">
+            Le voyage de <span class="text-gradient">Gouttelette</span> à Dieppe
+          </h1>
+          <p class="hero-desc">
+            Explore le <strong>cycle complet de l'eau</strong> à l'échelle locale ! De l'évaporation sur les rochers de la plage de Dieppe, en traversant la nappe phréatique et la rivière l'Arques, jusqu'aux profondeurs bioluminescentes de la Manche.
+          </p>
+
+          <div class="hero-action-bar">
+            <input type="text" id="student-name-input" class="input-name" placeholder="Ton prénom (ex: Camille)" value="Camille" oninput="updateStudentName(this.value)">
+            <button class="btn-primary" onclick="startAdventure()">
+              <span>Commencer l'Aventure</span>
+              <span>➔</span>
+            </button>
+          </div>
+
+          <div style="font-size: 0.785rem; color: var(--text-muted); display: flex; gap: 1rem;">
+            <span>💡 3 Chapitres Interactifs</span>
+            <span>·</span>
+            <span>3 Badges Scientifiques</span>
+            <span>·</span>
+            <span>Diplôme CM2 à imprimer</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="mascot-card">
+            <div class="mascot-visual">
+              <!-- SVG Gouttelette Mascot -->
+              <svg class="mascot-drop-svg" viewBox="0 0 100 130">
+                <defs>
+                  <linearGradient id="dropGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#a5f3fc" />
+                    <stop offset="50%" stop-color="#38bdf8" />
+                    <stop offset="100%" stop-color="#0284c7" />
+                  </linearGradient>
+                  <filter id="dropGlow">
+                    <feGaussianBlur stdDeviation="4" result="glow" />
+                    <feMerge>
+                      <feMergeNode in="glow" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                <path d="M 50 10 C 50 10, 85 60, 85 85 C 85 105, 69 122, 50 122 C 31 122, 15 105, 15 85 C 15 60, 50 10, 50 10 Z" fill="url(#dropGrad)" filter="url(#dropGlow)" />
+                <!-- Eyes & Smile -->
+                <circle cx="40" cy="78" r="4.5" fill="#070b14" />
+                <circle cx="60" cy="78" r="4.5" fill="#070b14" />
+                <circle cx="42" cy="76" r="1.5" fill="#fff" />
+                <circle cx="62" cy="76" r="1.5" fill="#fff" />
+                <path d="M 43 89 Q 50 96, 57 89" stroke="#070b14" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                <!-- Highlight bubble -->
+                <ellipse cx="38" cy="46" rx="8" ry="16" fill="rgba(255,255,255,0.45)" transform="rotate(-20 38 46)" />
+              </svg>
+            </div>
+            <div class="mascot-info">
+              <div>
+                <strong style="color: #fff; display: block;">Gouttelette</strong>
+                <span style="color: var(--text-muted); font-size: 0.72rem;">Molécule d'eau en mission</span>
+              </div>
+              <span style="color: var(--cyan-bright); font-family: var(--font-mono);">H₂O · Normandie</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chapter Selection Grid -->
+      <div class="section-header">
+        <h2 class="section-title">Les 3 Chapitres de l'Expédition</h2>
+        <p class="section-desc">Suis le parcours naturel de l'eau à travers les écosystèmes dieppois</p>
+      </div>
+
+      <div class="chapters-grid">
+        <!-- Chapter 1 -->
+        <div class="chapter-card" onclick="switchScreen('chapter1')">
+          <div>
+            <div class="card-banner" style="background: linear-gradient(135deg, #091c36 0%, #17365d 100%);">
+              <span class="card-step-badge">CHAPITRE 1</span>
+              <span class="card-status" id="badge-status-1">VALIDÉ ✓</span>
+              <span style="font-size: 3rem;">☀️ 🌊</span>
+            </div>
+            <div class="card-kicker" style="color: var(--cyan-bright);">ÉVAPORATION & CONDENSATION</div>
+            <h3 class="card-title">La Plage de Dieppe & son Platier Rocheux</h3>
+            <p class="card-desc">
+              Chauffée par le soleil dans une mare du platier, Gouttelette s'évapore en gaz, forme un nuage au-dessus des falaises de craie et retombe en pluie fine sur le relief.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>Badge : Lueur du Platier</span>
+            <span style="color: var(--cyan-bright);">Explorer ➔</span>
+          </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="chapter-card" onclick="switchScreen('chapter2')">
+          <div>
+            <div class="card-banner" style="background: linear-gradient(135deg, #062b20 0%, #0d543e 100%);">
+              <span class="card-step-badge" style="color: var(--emerald-bright);">CHAPITRE 2</span>
+              <span class="card-status" id="badge-status-2">VALIDÉ ✓</span>
+              <span style="font-size: 3rem;">🌿 🐟</span>
+            </div>
+            <div class="card-kicker" style="color: var(--emerald-bright);">INFILTRATION & COURS D'EAU</div>
+            <h3 class="card-title">La Rivière l'Arques & sa Ripisylve</h3>
+            <p class="card-desc">
+              Infiltre-toi dans le sol cauchois calcaire jusqu'à la nappe phréatique, puis dévale la rivière ombragée par les saules aux côtés de la truite fario et des libellules.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>Badge : Gardien de l'Arques</span>
+            <span style="color: var(--emerald-bright);">Explorer ➔</span>
+          </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="chapter-card" onclick="switchScreen('chapter3')">
+          <div>
+            <div class="card-banner" style="background: linear-gradient(135deg, #101438 0%, #212c75 100%);">
+              <span class="card-step-badge" style="color: var(--indigo-bright);">CHAPITRE 3</span>
+              <span class="card-status" id="badge-status-3">VALIDÉ ✓</span>
+              <span style="font-size: 3rem;">🌊 ✨</span>
+            </div>
+            <div class="card-kicker" style="color: var(--indigo-bright);">IMMERSION & PLANCTON</div>
+            <h3 class="card-title">Le Retour dans la Manche & l'Océan</h3>
+            <p class="card-desc">
+              Entre dans l'eau salée de la Manche, stimule la bioluminescence du phytoplancton qui produit l'oxygène de la Terre et boucle éternellement le grand cycle !
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>Badge : Messager de la Manche</span>
+            <span style="color: var(--indigo-bright);">Explorer ➔</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Synthesis Tools Strip -->
+      <div class="tools-strip">
+        <div class="tool-box" onclick="switchScreen('diagram')">
+          <span style="font-size: 1.5rem;">🧩</span>
+          <h4 class="tool-title">Schéma Dynamique du Cycle</h4>
+          <p class="tool-desc">Reconstitue le grand schéma panoramique et place les étiquettes scientifiques.</p>
+        </div>
+        <div class="tool-box" onclick="switchScreen('quiz')">
+          <span style="font-size: 1.5rem;">📝</span>
+          <h4 class="tool-title">Le Quizz de Validation CM2</h4>
+          <p class="tool-desc">Teste tes connaissances sur les changements d'état et l'écologie locale.</p>
+        </div>
+        <div class="tool-box" onclick="switchScreen('diploma')">
+          <span style="font-size: 1.5rem;">🎓</span>
+          <h4 class="tool-title">Diplôme d'Éco-Citoyen</h4>
+          <p class="tool-desc">Génère et imprime ton certificat officiel de réussite Eco2 Nature.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN: CHAPITRE 1 (PLATIER ROCHEUX & ÉVAPORATION) -->
+    <section id="screen-chapter1" class="screen">
+      <div class="chapter-header">
+        <div>
+          <div class="hero-kicker">Chapitre 1 sur 3 · Littoral Dieppois</div>
+          <h1 style="font-size: 2rem; color: #fff;">La Plage de Dieppe & son Platier Rocheux</h1>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Évaporation sous l'énergie solaire et condensation en nuage de pluie</p>
+        </div>
+        <div class="step-pill-indicator" id="c1-phase-indicator">
+          <span>Phase 1 : Évaporation de la mare</span>
+        </div>
+      </div>
+
+      <div class="game-arena-grid">
+        <div class="arena-container">
+          <!-- Artistic Vector Header Scene -->
+          <div class="arena-photo-header" style="background: linear-gradient(135deg, #091e3a 0%, #10335e 100%);">
+            <div class="arena-photo-scrim"></div>
+            <div style="position: relative; z-index: 10; font-size: 0.75rem; color: #e2e8f0; display: flex; justify-content: space-between; width: 100%;">
+              <span>Falaises de craie d'Albâtre & platier rocheux à marée basse</span>
+              <span id="c1-state-label" style="color: var(--cyan-bright);">État : Liquide</span>
+            </div>
+          </div>
+
+          <!-- Arena Stage -->
+          <div class="arena-canvas-stage" id="c1-canvas" onmousemove="handleC1Move(event)" ontouchmove="handleC1Touch(event)">
+            <!-- Droplet avatar -->
+            <div class="droplet-avatar" id="c1-droplet" style="left: 50%; top: 75%;">
+              <div class="droplet-core">💧</div>
+              <div class="droplet-label" id="c1-droplet-label">Gouttelette</div>
+            </div>
+
+            <!-- Heat / Saturation HUD -->
+            <div class="hud-box">
+              <div style="display: flex; justify-content: space-between; color: var(--text-muted);" id="c1-hud-header">
+                <span id="c1-hud-title">Chaleur Solaire</span>
+                <strong id="c1-hud-val" style="color: var(--amber-bright);">10%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="c1-hud-bar" style="background: linear-gradient(90deg, #38bdf8, #fbbf24);"></div>
+              </div>
+            </div>
+
+            <!-- Cloud shape for phase 2 -->
+            <div id="c1-cloud-visual" style="position: absolute; top: 18%; left: 50%; transform: translateX(-50%); width: 140px; height: 60px; background: rgba(255,255,255,0.25); border-radius: 999px; filter: blur(12px); display: none;"></div>
+
+            <!-- Dynamic falling particles container -->
+            <div id="c1-particles-layer"></div>
+
+            <!-- Intro / Victory Overlay Modal inside Arena -->
+            <div class="arena-overlay-msg" id="c1-overlay">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">☀️</div>
+              <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 0.5rem;">Prêt pour l'évaporation ?</h3>
+              <p style="font-size: 0.85rem; color: #cbd5e1; max-width: 380px; margin-bottom: 1.5rem;">
+                Gouttelette est dans une mare résiduelle au pied des falaises de craie. Déplace-la pour attraper les <strong>rayons solaires dorés</strong> et passer de l'état liquide à l'état de vapeur !
+              </p>
+              <button class="btn-primary" onclick="startC1Game()">Commencer l'expérience</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Concept Deck -->
+        <div class="side-deck">
+          <div class="deck-card">
+            <h4 class="deck-title">📘 Les 3 États de l'Eau (CM2)</h4>
+            <p style="color: #cbd5e1; line-height: 1.5; margin-bottom: 0.5rem;">
+              À Dieppe, l'eau change d'état sous l'effet de la température :
+            </p>
+            <ul style="padding-left: 1.2rem; color: var(--text-muted); space-y: 0.25rem;">
+              <li><strong style="color: var(--cyan-bright);">Liquide :</strong> Dans les mares et la mer.</li>
+              <li><strong style="color: var(--amber-bright);">Gazeux (Vapeur) :</strong> Quand le soleil la réchauffe.</li>
+              <li><strong style="color: #cbd5e1;">Condensation :</strong> En altitude où l'air frais forme le nuage de pluie.</li>
+            </ul>
+          </div>
+
+          <div class="deck-card">
+            <h4 class="deck-title">🦀 Biodiversité du Platier</h4>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Espèces observant Gouttelette à marée basse :</p>
+            <div class="species-list-compact">
+              <button class="species-pill-btn" onclick="showFact('anemone')">
+                <span>🔴 Anémone Tomate</span>
+                <span style="color: var(--cyan-bright);">Info</span>
+              </button>
+              <button class="species-pill-btn" onclick="showFact('crevette')">
+                <span>🦐 Crevette Bouquet</span>
+                <span style="color: var(--cyan-bright);">Info</span>
+              </button>
+              <button class="species-pill-btn" onclick="showFact('fucus')">
+                <span>🌿 Fucus Vésiculeux (Algue)</span>
+                <span style="color: var(--cyan-bright);">Info</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN: CHAPITRE 2 (RIVIÈRE L'ARQUES & INFILTRATION) -->
+    <section id="screen-chapter2" class="screen">
+      <div class="chapter-header">
+        <div>
+          <div class="hero-kicker" style="color: var(--emerald-bright);">Chapitre 2 sur 3 · Bassin Versant de l'Arques</div>
+          <h1 style="font-size: 2rem; color: #fff;">La Rivière l'Arques : Infiltration & Ripisylve</h1>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Filtration par la craie cauchoise, nappe phréatique et écoulement fluvial</p>
+        </div>
+        <div class="step-pill-indicator" id="c2-phase-indicator">
+          <span>Phase 1 : Infiltration dans le sol</span>
+        </div>
+      </div>
+
+      <div class="game-arena-grid">
+        <div class="arena-container">
+          <div class="arena-photo-header" style="background: linear-gradient(135deg, #062b20 0%, #0c4d39 100%);">
+            <div class="arena-photo-scrim"></div>
+            <div style="position: relative; z-index: 10; font-size: 0.75rem; color: #e2e8f0; display: flex; justify-content: space-between; width: 100%;">
+              <span>Bassin versant & berges ombragées par la ripisylve</span>
+              <span id="c2-purity-label" style="color: var(--emerald-bright);">Pureté : 40%</span>
+            </div>
+          </div>
+
+          <div class="arena-canvas-stage" id="c2-canvas" style="background: radial-gradient(circle at 50% 30%, #061c16 0%, #030d0a 100%);" onmousemove="handleC2Move(event)" ontouchmove="handleC2Touch(event)">
+            <div class="droplet-avatar" id="c2-droplet" style="left: 50%; top: 25%;">
+              <div class="droplet-core" style="background: var(--emerald-bright); box-shadow: 0 0 20px var(--emerald-bright);">💧</div>
+              <div class="droplet-label" style="color: var(--emerald-bright); border-color: rgba(16, 185, 129, 0.4);">Gouttelette</div>
+            </div>
+
+            <div class="hud-box">
+              <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                <span id="c2-hud-title">Descente de l'Arques</span>
+                <strong id="c2-hud-val" style="color: var(--emerald-bright);">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="c2-hud-bar" style="background: linear-gradient(90deg, #10b981, #34d399);"></div>
+              </div>
+            </div>
+
+            <!-- River animated waves -->
+            <div id="c2-items-layer"></div>
+
+            <!-- Infiltration interactive buttons overlay for phase 1 -->
+            <div id="c2-soil-interactive" style="position: absolute; inset: 0; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; z-index: 25; background: rgba(7,11,20,0.65);">
+              <div style="font-size: 0.8rem; color: #cbd5e1; text-align: center; margin-bottom: 0.5rem;">
+                Clique sur chaque strate du sol pour filtrer Gouttelette jusqu'à la nappe :
+              </div>
+              <button class="step-chip" id="c2-btn-humus" onclick="stepSoil('humus')">
+                <span>🍂 1. Humus et Terre Végétale (Éponge naturelle)</span>
+              </button>
+              <button class="step-chip" id="c2-btn-craie" onclick="stepSoil('craie')" style="opacity: 0.5;" disabled>
+                <span>⚪ 2. Craie Calcaire & Silex (Filtration et minéraux)</span>
+              </button>
+              <button class="step-chip" id="c2-btn-nappe" onclick="stepSoil('nappe')" style="opacity: 0.5;" disabled>
+                <span>💧 3. Nappe Phréatique & Sources de l'Arques</span>
+              </button>
+            </div>
+
+            <!-- Intro / Outro overlay -->
+            <div class="arena-overlay-msg" id="c2-overlay" style="display: none;"></div>
+          </div>
+        </div>
+
+        <div class="side-deck">
+          <div class="deck-card">
+            <h4 class="deck-title">🌳 Le Rôle de la Ripisylve</h4>
+            <p style="color: #cbd5e1; line-height: 1.5;">
+              La <strong>ripisylve</strong> (saules, aulnes le long de l'Arques) agit comme un triple bouclier :
+            </p>
+            <div style="margin-top: 0.5rem; font-size: 0.785rem; color: var(--text-muted); space-y: 0.35rem;">
+              <div>🛡️ <strong>Anti-érosion :</strong> Les racines retiennent les berges.</div>
+              <div>🍃 <strong>Climatiseur :</strong> L'ombrage garde l'eau fraîche.</div>
+              <div>🧽 <strong>Biofiltre :</strong> Elle absorbe les polluants avant le lit du fleuve.</div>
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <h4 class="deck-title">🐟 Espèces Bio-Indicatrices</h4>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Elles ne vivent que dans une eau pure :</p>
+            <div class="species-list-compact">
+              <button class="species-pill-btn" onclick="showFact('truite')">
+                <span>🐟 Truite Fario</span>
+                <span style="color: var(--emerald-bright);">Pureté ✓</span>
+              </button>
+              <button class="species-pill-btn" onclick="showFact('calopteryx')">
+                <span>🦋 Calopteryx Éclatant</span>
+                <span style="color: var(--emerald-bright);">Ripisylve ✓</span>
+              </button>
+              <button class="species-pill-btn" onclick="showFact('ephemere')">
+                <span>🪲 Larve d'Éphémère</span>
+                <span style="color: var(--emerald-bright);">Excellence ✓</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN: CHAPITRE 3 (LA MANCHE & PLANCTON) -->
+    <section id="screen-chapter3" class="screen">
+      <div class="chapter-header">
+        <div>
+          <div class="hero-kicker" style="color: var(--indigo-bright);">Chapitre 3 sur 3 · Milieu Marin Pélagique</div>
+          <h1 style="font-size: 2rem; color: #fff;">Le Retour dans la Manche & le Plancton</h1>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Estuaire, salinité (35 g/L), bioluminescence et poumon bleu de la Terre</p>
+        </div>
+        <div class="step-pill-indicator" id="c3-phase-indicator">
+          <span>Phase 1 : L'estuaire et la salinité</span>
+        </div>
+      </div>
+
+      <div class="game-arena-grid">
+        <div class="arena-container">
+          <div class="arena-photo-header" style="background: linear-gradient(135deg, #090e29 0%, #171d54 100%);">
+            <div class="arena-photo-scrim"></div>
+            <div style="position: relative; z-index: 10; font-size: 0.75rem; color: #e2e8f0; display: flex; justify-content: space-between; width: 100%;">
+              <span>Eaux pélagiques de la Manche au large de Dieppe</span>
+              <span id="c3-salinity-label" style="color: var(--indigo-bright);">Salinité : 0 g/L</span>
+            </div>
+          </div>
+
+          <div class="arena-canvas-stage" id="c3-canvas" style="background: radial-gradient(circle at 50% 30%, #090e2b 0%, #030512 100%);" onmousemove="handleC3Move(event)" ontouchmove="handleC3Touch(event)">
+            <div class="droplet-avatar" id="c3-droplet" style="left: 50%; top: 50%;">
+              <div class="droplet-core" style="background: var(--indigo-bright); box-shadow: 0 0 20px var(--indigo-bright);">💧</div>
+              <div class="droplet-label" style="color: var(--indigo-bright); border-color: rgba(129, 140, 248, 0.4);">Gouttelette Marine</div>
+            </div>
+
+            <div class="hud-box">
+              <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                <span>Plancton Stimulé</span>
+                <strong id="c3-hud-val" style="color: var(--indigo-bright);">0 / 12</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="c3-hud-bar" style="background: linear-gradient(90deg, #818cf8, #38bdf8);"></div>
+              </div>
+            </div>
+
+            <!-- Glowing plankton layer -->
+            <div id="c3-plankton-layer"></div>
+
+            <!-- Estuary mix overlay -->
+            <div class="arena-overlay-msg" id="c3-overlay">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌊</div>
+              <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 0.5rem;">L'Estuaire de Dieppe</h3>
+              <p style="font-size: 0.85rem; color: #cbd5e1; max-width: 380px; margin-bottom: 1.5rem;">
+                Gouttelette quitte l'eau douce de l'Arques pour plonger dans l'eau salée de la mer de la Manche. Prêt à tester la salinité de <strong>35 grammes de sel par litre</strong> ?
+              </p>
+              <button class="btn-primary" onclick="mixEstuary()">Plonger dans la Manche</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-deck">
+          <div class="deck-card">
+            <h4 class="deck-title">🔬 Le Poumon Bleu de la Terre</h4>
+            <p style="color: #cbd5e1; line-height: 1.5;">
+              Le <strong>phytoplancton</strong> (comme les diatomées microscopiques) produit plus de la moitié de l'oxygène de notre planète grâce à la photosynthèse marine !
+            </p>
+            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--indigo-bright); font-family: var(--font-mono);">
+              1 respiration sur 2 provient du plancton !
+            </div>
+          </div>
+
+          <div class="deck-card">
+            <h4 class="deck-title">🐟 La Chaîne Alimentaire Dieppoise</h4>
+            <div class="species-list-compact">
+              <button class="species-pill-btn" onclick="showFact('diatomee')">
+                <span>🔬 Diatomée (Phytoplancton)</span>
+                <span style="color: var(--indigo-bright);">O₂ ✓</span>
+              </button>
+              <button class="species-pill-btn" onclick="showFact('copepode')">
+                <span>🦐 Copépode (Zooplancton)</span>
+                <span style="color: var(--indigo-bright);">Nourriture ✓</span>
+              </button>
+              <button class="species-pill-btn" onclick="showFact('hareng')">
+                <span>🐟 Hareng Dieppois</span>
+                <span style="color: var(--indigo-bright);">Histoire ✓</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN: SCHÉMA DYNAMIQUE DU CYCLE DE L'EAU -->
+    <section id="screen-diagram" class="screen">
+      <div class="chapter-header">
+        <div>
+          <div class="hero-kicker">Synthèse Pédagogique Eco2 Nature · CM2</div>
+          <h1 style="font-size: 2rem; color: #fff;">Schéma Dynamique du Grand Cycle de l'Eau</h1>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Sélectionne une étiquette ci-dessous puis clique sur la zone correspondante du paysage cauchois.
+          </p>
+        </div>
+        <div class="step-pill-indicator">
+          <span>Étapes validées : <strong id="diagram-score" style="color: var(--cyan-bright);">0 / 6</strong></span>
+        </div>
+      </div>
+
+      <!-- Labels Tray -->
+      <div class="chips-tray" id="chips-tray">
+        <button class="step-chip" id="chip-evap" onclick="selectChip('evaporation')">
+          <span>☀️ 1. Évaporation (Liquide ➔ Gaz)</span>
+        </button>
+        <button class="step-chip" id="chip-cond" onclick="selectChip('condensation')">
+          <span>☁️ 2. Condensation (Nuage cauchois)</span>
+        </button>
+        <button class="step-chip" id="chip-prec" onclick="selectChip('precipitation')">
+          <span>🌧️ 3. Précipitation (Pluie sur falaises)</span>
+        </button>
+        <button class="step-chip" id="chip-infil" onclick="selectChip('infiltration')">
+          <span>💧 4. Infiltration (Craie & Nappe)</span>
+        </button>
+        <button class="step-chip" id="chip-ruiss" onclick="selectChip('ruissellement')">
+          <span>🌿 5. Ruissellement (Rivière l'Arques)</span>
+        </button>
+        <button class="step-chip" id="chip-ocean" onclick="selectChip('ocean_return')">
+          <span>🌊 6. Immersion (Manche & Plancton)</span>
+        </button>
+      </div>
+
+      <!-- Panoramic Vector Diagram Stage -->
+      <div class="diagram-board">
+        <svg viewBox="0 0 1000 580" style="width: 100%; height: 100%; position: absolute; inset: 0;" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="diagSky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#081026" />
+              <stop offset="60%" stop-color="#0c2042" />
+              <stop offset="100%" stop-color="#122a47" />
+            </linearGradient>
+            <linearGradient id="diagCliff" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#e2e8f0" />
+              <stop offset="50%" stop-color="#cbd5e1" />
+              <stop offset="100%" stop-color="#64748b" />
+            </linearGradient>
+            <linearGradient id="diagSea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0284c7" />
+              <stop offset="100%" stop-color="#041830" />
+            </linearGradient>
+            <linearGradient id="diagSoil" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1c1917" />
+              <stop offset="40%" stop-color="#451a03" />
+              <stop offset="100%" stop-color="#1e293b" />
+            </linearGradient>
+          </defs>
+
+          <!-- Sky -->
+          <rect width="1000" height="380" fill="url(#diagSky)" />
+
+          <!-- Sun -->
+          <circle cx="140" cy="80" r="34" fill="#fef08a" opacity="0.9" />
+          <circle cx="140" cy="80" r="50" fill="#fef08a" opacity="0.2" />
+
+          <!-- Normandy Hinterland / Cauchois Hills -->
+          <path d="M 500 300 Q 680 230, 850 240 L 1000 260 L 1000 580 L 500 580 Z" fill="#064e3b" opacity="0.9" />
+
+          <!-- Soil layers (cross-section) -->
+          <path d="M 620 310 L 1000 310 L 1000 580 L 620 580 Z" fill="url(#diagSoil)" />
+          <path d="M 640 400 L 1000 400 L 1000 500 L 640 500 Z" fill="#94a3b8" opacity="0.25" />
+          <path d="M 660 490 Q 820 470, 1000 480 L 1000 560 L 660 560 Z" fill="#0ea5e9" opacity="0.4" />
+
+          <!-- Chalk Cliffs of Dieppe -->
+          <path d="M 330 380 L 360 250 Q 420 260, 480 270 L 520 330 L 520 440 L 330 440 Z" fill="url(#diagCliff)" />
+
+          <!-- Rocky Platier Estran at low tide -->
+          <path d="M 160 410 Q 260 400, 340 420 L 340 460 Q 230 450, 160 460 Z" fill="#1e293b" />
+
+          <!-- River Arques flowing down to sea -->
+          <path d="M 850 280 Q 750 320, 680 350 T 520 400 T 360 450 L 340 470 L 380 480 T 540 420 T 700 365 T 870 290 Z" fill="#0ea5e9" opacity="0.9" />
+
+          <!-- Sea / Manche -->
+          <path d="M 0 440 Q 180 430, 340 470 L 340 580 L 0 580 Z" fill="url(#diagSea)" />
+
+          <!-- Clouds -->
+          <ellipse cx="440" cy="120" rx="70" ry="28" fill="#f8fafc" opacity="0.9" />
+          <ellipse cx="480" cy="110" rx="60" ry="30" fill="#e2e8f0" opacity="0.85" />
+          <ellipse cx="400" cy="125" rx="50" ry="24" fill="#cbd5e1" opacity="0.8" />
+
+          <!-- Animated cycle path lines -->
+          <path id="path-evap" d="M 210 410 Q 230 260, 380 160" fill="none" stroke="#fef08a" stroke-width="3" stroke-dasharray="6 4" opacity="0.2" />
+          <path id="path-prec" d="M 500 150 L 640 260" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="6 4" opacity="0.2" />
+          <path id="path-infil" d="M 780 300 L 790 460" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="6 4" opacity="0.2" />
+          <path id="path-ruiss" d="M 720 360 Q 560 410, 350 470" fill="none" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="8 6" opacity="0.2" />
+          <path id="path-ocean" d="M 320 500 Q 180 540, 120 490 T 200 430" fill="none" stroke="#818cf8" stroke-width="3" stroke-dasharray="6 4" opacity="0.2" />
+        </svg>
+
+        <!-- Drop Targets -->
+        <!-- Target 1: Evaporation (Platier Sky) -->
+        <div class="diagram-target" style="left: 20%; top: 48%;" onclick="clickTarget('evaporation')">
+          <div class="target-circle" id="target-evaporation">1 ?</div>
+        </div>
+
+        <!-- Target 2: Condensation (Cloud) -->
+        <div class="diagram-target" style="left: 44%; top: 22%;" onclick="clickTarget('condensation')">
+          <div class="target-circle" id="target-condensation">2 ?</div>
+        </div>
+
+        <!-- Target 3: Precipitation (Rain) -->
+        <div class="diagram-target" style="left: 64%; top: 34%;" onclick="clickTarget('precipitation')">
+          <div class="target-circle" id="target-precipitation">3 ?</div>
+        </div>
+
+        <!-- Target 4: Infiltration (Soil/Aquifer) -->
+        <div class="diagram-target" style="left: 82%; top: 72%;" onclick="clickTarget('infiltration')">
+          <div class="target-circle" id="target-infiltration">4 ?</div>
+        </div>
+
+        <!-- Target 5: Ruissellement (River Arques) -->
+        <div class="diagram-target" style="left: 56%; top: 68%;" onclick="clickTarget('ruissellement')">
+          <div class="target-circle" id="target-ruissellement">5 ?</div>
+        </div>
+
+        <!-- Target 6: Immersion Marine (Manche) -->
+        <div class="diagram-target" style="left: 16%; top: 84%;" onclick="clickTarget('ocean_return')">
+          <div class="target-circle" id="target-ocean_return">6 ?</div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+        <button class="step-chip" onclick="resetDiagram()">Réinitialiser le schéma</button>
+        <button class="btn-primary" onclick="switchScreen('diploma')">Voir mon Diplôme Eco2 Nature ➔</button>
+      </div>
+    </section>
+
+    <!-- SCREEN: QUIZZ CM2 -->
+    <section id="screen-quiz" class="screen">
+      <div class="chapter-header">
+        <div>
+          <div class="hero-kicker">Validation des Connaissances CM2</div>
+          <h1 style="font-size: 2rem; color: #fff;">Le Quizz de Gouttelette</h1>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Réponds aux 5 questions pour valider tes compétences naturalistes</p>
+        </div>
+      </div>
+
+      <div style="max-width: 680px; margin: 0 auto; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; font-family: var(--font-mono);">
+          <span id="quiz-question-num">Question 1 sur 5</span>
+          <span id="quiz-concept-tag" style="color: var(--cyan-bright);">Changements d'état</span>
+        </div>
+
+        <h3 id="quiz-question-text" style="color: #fff; font-size: 1.2rem; line-height: 1.4; margin-bottom: 1.5rem;">
+          Question ici
+        </h3>
+
+        <div id="quiz-options-container" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <!-- Injected via JS -->
+        </div>
+
+        <div id="quiz-explanation" style="display: none; padding: 1rem; border-radius: 12px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); font-size: 0.8rem; color: #cbd5e1; margin-bottom: 1.5rem;">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="btn-primary" id="quiz-next-btn" style="display: none;" onclick="nextQuizQuestion()">
+            Question suivante ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN: DIPLÔME OFFICIEL ECO2 NATURE -->
+    <section id="screen-diploma" class="screen">
+      <div class="print-hide" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <div class="hero-kicker">Diplôme Officiel Eco2 Nature</div>
+          <h1 style="font-size: 2rem; color: #fff;">Brevet d'Éco-Citoyen de l'Eau</h1>
+        </div>
+        <button class="btn-primary" onclick="window.print()">
+          <span>🖨️ Imprimer mon Diplôme</span>
+        </button>
+      </div>
+
+      <!-- Printable Diploma Card -->
+      <div class="diploma-frame" id="diploma-printable">
+        <div class="diploma-inner-border"></div>
+
+        <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--cyan-bright); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem;">
+          Eco2 Nature · Territoire Littoral de Dieppe
+        </div>
+
+        <h2 style="font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: #fff; margin-bottom: 0.5rem;">
+          DIPLÔME D'ÉCO-CITOYEN DE L'EAU
+        </h2>
+
+        <p style="font-size: 0.95rem; color: #94a3b8; font-weight: 500;">
+          Cycle naturel de l'eau & Biodiversité du Pays Cauchois
+        </p>
+
+        <div style="margin: 2.5rem 0 1.5rem;">
+          <p style="font-size: 0.8rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em;">
+            Ce diplôme est décerné avec les félicitations du jury à l'élève de CM2 :
+          </p>
+          <div class="diploma-student-name" id="diploma-display-name">Camille</div>
+          <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan-bright), transparent); margin: 0 auto;"></div>
+          <p style="font-size: 0.85rem; color: #cbd5e1; max-width: 540px; margin: 1rem auto 0; line-height: 1.6;">
+            Pour avoir accompli l'expédition scientifique <strong>« Le voyage de Gouttelette à Dieppe »</strong>, maîtrisé les 3 états de l'eau, exploré les nappes de l'Arques et protégé le plancton de la Manche.
+          </p>
+        </div>
+
+        <div class="diploma-badges-row">
+          <div class="diploma-badge-box" id="diploma-b1">
+            <div style="font-size: 2rem; margin-bottom: 0.25rem;">☀️</div>
+            <strong style="color: #fff; display: block; font-size: 0.9rem;">Lueur du Platier</strong>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Évaporation & Condensation</span>
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--cyan-bright); margin-top: 0.35rem;" id="diploma-b1-status">En cours</div>
+          </div>
+
+          <div class="diploma-badge-box" id="diploma-b2">
+            <div style="font-size: 2rem; margin-bottom: 0.25rem;">🌿</div>
+            <strong style="color: #fff; display: block; font-size: 0.9rem;">Gardien de l'Arques</strong>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Infiltration & Ripisylve</span>
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--emerald-bright); margin-top: 0.35rem;" id="diploma-b2-status">En cours</div>
+          </div>
+
+          <div class="diploma-badge-box" id="diploma-b3">
+            <div style="font-size: 2rem; margin-bottom: 0.25rem;">🌊</div>
+            <strong style="color: #fff; display: block; font-size: 0.9rem;">Messager de la Manche</strong>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Salinité & Plancton marin</span>
+            <div style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--indigo-bright); margin-top: 0.35rem;" id="diploma-b3-status">En cours</div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 1.5rem; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted); text-align: left;">
+          <div>
+            <span>Délivré le :</span>
+            <strong style="color: #fff;" id="diploma-date">26 octobre 2026</strong>
+          </div>
+          <div style="text-align: right;">
+            <strong style="color: var(--cyan-bright); display: block;">Comité Scientifique Eco2 Nature</strong>
+            <span>Éducation à l'Environnement</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal for Badge Unlocked Celebration -->
+  <div class="modal-backdrop" id="celebration-modal" style="display: none;">
+    <div class="modal-card">
+      <div style="font-size: 3rem; margin-bottom: 0.5rem;" id="modal-icon">🏆</div>
+      <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--cyan-bright); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem;">
+        Badge Eco2 Nature Débloqué !
+      </div>
+      <h3 style="color: #fff; font-size: 1.4rem; margin-bottom: 0.5rem;" id="modal-title">Titre du Badge</h3>
+      <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1.5rem;" id="modal-desc">
+        Description
+      </p>
+      <button class="btn-primary" style="width: 100%;" onclick="closeCelebrationModal()">
+        Continuer l'Aventure ➔
+      </button>
+    </div>
+  </div>
+
+  <!-- Fact Popup Modal -->
+  <div class="modal-backdrop" id="fact-modal" style="display: none;">
+    <div class="modal-card" style="border-color: var(--border-color);">
+      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;" id="fact-icon">🦐</div>
+      <h3 style="color: #fff; font-size: 1.25rem; margin-bottom: 0.25rem;" id="fact-title">Nom de l'Espèce</h3>
+      <div style="font-style: italic; font-size: 0.785rem; color: var(--text-muted); margin-bottom: 1rem;" id="fact-latin">Nom Scientifique</div>
+      <p style="font-size: 0.825rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 1rem;" id="fact-body">
+        Description
+      </p>
+      <div style="padding: 0.75rem; border-radius: 10px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); font-size: 0.75rem; color: var(--cyan-bright); margin-bottom: 1.25rem;" id="fact-anecdote">
+        Anecdote
+      </div>
+      <button class="step-chip" style="margin: 0 auto;" onclick="closeFactModal()">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Quiet Footer -->
+  <footer>
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+      <span>© Eco2 Nature · Le voyage de Gouttelette à Dieppe · Sciences CM2</span>
+      <span>Platier de Dieppe / Rivière l'Arques / Mer de la Manche</span>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       AUTONOMOUS JAVASCRIPT (ZERO DEPENDENCIES)
+       ========================================================================== -->
+  <script>
+    // --- 1. Web Audio API Synthesizer (Realistic sounds without any external files) ---
+    class SoundSynthesizer {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+        this.masterGain = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContextClass();
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.setValueAtTime(this.muted ? 0 : 0.4, this.ctx.currentTime);
+          this.masterGain.connect(this.ctx.destination);
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      toggleMute() {
+        this.muted = !this.muted;
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.setValueAtTime(this.muted ? 0 : 0.4, this.ctx.currentTime);
+        }
+        return this.muted;
+      }
+      playDrop(freq = 600) {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * 0.7, t);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.8, t + 0.08);
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(t);
+        osc.stop(t + 0.16);
+      }
+      playChime() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
+        const t = this.ctx.currentTime;
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, t + idx * 0.08);
+          gain.gain.setValueAtTime(0.01, t + idx * 0.08);
+          gain.gain.linearRampToValueAtTime(0.2, t + idx * 0.08 + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.08 + 0.5);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(t + idx * 0.08);
+          osc.stop(t + idx * 0.08 + 0.55);
+        });
+      }
+      playBiolum() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1200 + Math.random() * 600, t);
+        gain.gain.setValueAtTime(0.12, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(t);
+        osc.stop(t + 0.4);
+      }
+    }
+    const audio = new SoundSynthesizer();
+
+    function toggleAudio() {
+      const isMuted = audio.toggleMute();
+      document.getElementById('audio-icon').textContent = isMuted ? '🔇' : '🔊';
+      document.getElementById('audio-label').textContent = isMuted ? 'Son Coupé' : 'Son Naturel';
+      if (!isMuted) audio.playDrop(750);
+    }
+
+    // --- 2. Lightweight Autonomous Confetti Cannon (Zero external libs) ---
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function resizeConfetti() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeConfetti);
+    resizeConfetti();
+
+    function fireConfetti() {
+      const colors = ['#38bdf8', '#10b981', '#818cf8', '#fef08a', '#f43f5e'];
+      for (let i = 0; i < 90; i++) {
+        confettiParticles.push({
+          x: window.innerWidth * 0.5,
+          y: window.innerHeight * 0.55,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 18,
+          size: 6 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vrot: (Math.random() - 0.5) * 12,
+          alpha: 1,
+        });
+      }
+      if (!confettiAnimId) renderConfetti();
+    }
+
+    function renderConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      for (let i = confettiParticles.length - 1; i >= 0; i--) {
+        const p = confettiParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.45; // gravity
+        p.vx *= 0.98;
+        p.rotation += p.vrot;
+        p.alpha -= 0.012;
+
+        if (p.alpha <= 0) {
+          confettiParticles.splice(i, 1);
+          continue;
+        }
+
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate((p.rotation * Math.PI) / 180);
+        confettiCtx.globalAlpha = p.alpha;
+        confettiCtx.fillStyle = p.color;
+        confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        confettiCtx.restore();
+      }
+
+      if (confettiParticles.length > 0) {
+        confettiAnimId = requestAnimationFrame(renderConfetti);
+      } else {
+        confettiAnimId = null;
+      }
+    }
+
+    // --- 3. Game State Machine & Progress ---
+    const state = {
+      studentName: 'Camille',
+      badges: {
+        platier: false,
+        arques: false,
+        manche: false,
+      },
+      diagramPlaced: {
+        evaporation: false,
+        condensation: false,
+        precipitation: false,
+        infiltration: false,
+        ruissellement: false,
+        ocean_return: false,
+      },
+      selectedChip: null,
+      quizIndex: 0,
+      quizScore: 0,
+      c1: { phase: 'intro', heat: 10, cloud: 0, drops: [] },
+      c2: { phase: 'soil', depth: 0, purity: 40, distance: 0 },
+      c3: { phase: 'intro', salinity: 0, litPlankton: 0 }
+    };
+
+    function updateStudentName(name) {
+      state.studentName = name || 'Élève Éco-Citoyen';
+      document.getElementById('diploma-display-name').textContent = state.studentName;
+    }
+
+    function switchScreen(screenId) {
+      audio.playDrop(650);
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+      const target = document.getElementById(`screen-${screenId}`);
+      if (target) target.classList.add('active');
+
+      const navLink = document.getElementById(`nav-${screenId}`);
+      if (navLink) navLink.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startAdventure() {
+      switchScreen('chapter1');
+    }
+
+    function unlockBadge(badgeId) {
+      if (state.badges[badgeId]) return;
+      state.badges[badgeId] = true;
+      audio.playChime();
+      fireConfetti();
+
+      // Update badge counter pill
+      const count = Object.values(state.badges).filter(Boolean).length;
+      document.getElementById('header-badge-count').textContent = `${count} / 3 Badges`;
+
+      // Update card statuses
+      if (badgeId === 'platier') {
+        document.getElementById('badge-status-1').classList.add('unlocked');
+        document.getElementById('diploma-b1').classList.add('earned');
+        document.getElementById('diploma-b1-status').textContent = 'Validé ✓';
+        showCelebration('Badge : Lueur du Platier', 'Tu as maîtrisé l\'évaporation sous la chaleur du soleil et la condensation en altitude pour former la pluie cauchoise !', '☀️');
+      } else if (badgeId === 'arques') {
+        document.getElementById('badge-status-2').classList.add('unlocked');
+        document.getElementById('diploma-b2').classList.add('earned');
+        document.getElementById('diploma-b2-status').textContent = 'Validé ✓';
+        showCelebration('Badge : Gardien de l\'Arques', 'Tu as guidé Gouttelette à travers les strates filtrantes de craie et les méandres protégés par la ripisylve !', '🌿');
+      } else if (badgeId === 'manche') {
+        document.getElementById('badge-status-3').classList.add('unlocked');
+        document.getElementById('diploma-b3').classList.add('earned');
+        document.getElementById('diploma-b3-status').textContent = 'Validé ✓';
+        showCelebration('Badge : Messager de la Manche', 'Tu as bouclé le grand cycle de l\'eau en stimulant le phytoplancton bioluminescent qui alimente la Manche !', '🌊');
+      }
+    }
+
+    function showCelebration(title, desc, icon) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-desc').textContent = desc;
+      document.getElementById('modal-icon').textContent = icon;
+      document.getElementById('celebration-modal').style.display = 'flex';
+    }
+
+    function closeCelebrationModal() {
+      document.getElementById('celebration-modal').style.display = 'none';
+      audio.playDrop(800);
+    }
+
+    // --- 4. Chapter 1 Mechanics ---
+    let c1Interval = null;
+
+    function startC1Game() {
+      audio.playDrop(800);
+      document.getElementById('c1-overlay').style.display = 'none';
+      state.c1.phase = 'evaporation';
+      state.c1.heat = 15;
+      updateC1Hud();
+
+      // Spawn falling solar particles
+      c1Interval = setInterval(() => {
+        if (state.c1.phase !== 'evaporation') return;
+        spawnC1Particle();
+      }, 700);
+    }
+
+    function spawnC1Particle() {
+      const layer = document.getElementById('c1-particles-layer');
+      const p = document.createElement('div');
+      const x = 15 + Math.random() * 70;
+      p.style.position = 'absolute';
+      p.style.left = `${x}%`;
+      p.style.top = '10%';
+      p.style.width = '24px';
+      p.style.height = '24px';
+      p.style.borderRadius = '50%';
+      p.style.background = '#fef08a';
+      p.style.boxShadow = '0 0 16px #fbbf24';
+      p.style.display = 'flex';
+      p.style.alignItems = 'center';
+      p.style.justifyContent = 'center';
+      p.style.fontSize = '12px';
+      p.textContent = '☀️';
+      p.style.transition = 'top 3s linear';
+      layer.appendChild(p);
+
+      setTimeout(() => { p.style.top = '90%'; }, 20);
+
+      // Check collision with Gouttelette
+      const checkCol = setInterval(() => {
+        const drop = document.getElementById('c1-droplet');
+        const dropRect = drop.getBoundingClientRect();
+        const pRect = p.getBoundingClientRect();
+
+        const dist = Math.hypot(dropRect.x - pRect.x, dropRect.y - pRect.y);
+        if (dist < 40) {
+          audio.playDrop(850);
+          state.c1.heat = Math.min(100, state.c1.heat + 20);
+          updateC1Hud();
+          clearInterval(checkCol);
+          p.remove();
+
+          if (state.c1.heat >= 100) {
+            triggerCondensationPhase();
+          }
+        }
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(checkCol);
+        if (p.parentNode) p.remove();
+      }, 3000);
+    }
+
+    function updateC1Hud() {
+      document.getElementById('c1-hud-val').textContent = `${state.c1.heat}%`;
+      document.getElementById('c1-hud-bar').style.width = `${state.c1.heat}%`;
+    }
+
+    function triggerCondensationPhase() {
+      state.c1.phase = 'condensation';
+      clearInterval(c1Interval);
+      document.getElementById('c1-particles-layer').innerHTML = '';
+      document.getElementById('c1-phase-indicator').innerHTML = '<span>Phase 2 : Condensation en nuage cauchois ☁️</span>';
+      document.getElementById('c1-state-label').textContent = 'État : Gazeux ➔ Condensation';
+      document.getElementById('c1-droplet-label').textContent = 'Vapeur d\'eau';
+      document.getElementById('c1-cloud-visual').style.display = 'block';
+      document.getElementById('c1-hud-title').textContent = 'Saturation du Nuage';
+      state.c1.cloud = 20;
+      document.getElementById('c1-hud-val').textContent = `${state.c1.cloud}%`;
+      document.getElementById('c1-hud-bar').style.width = `${state.c1.cloud}%`;
+
+      audio.playChime();
+
+      // Click to condense
+      const canvas = document.getElementById('c1-canvas');
+      const clickHandler = () => {
+        if (state.c1.phase !== 'condensation') return;
+        audio.playDrop(950);
+        state.c1.cloud = Math.min(100, state.c1.cloud + 20);
+        document.getElementById('c1-hud-val').textContent = `${state.c1.cloud}%`;
+        document.getElementById('c1-hud-bar').style.width = `${state.c1.cloud}%`;
+        document.getElementById('c1-cloud-visual').style.width = `${140 + state.c1.cloud * 1.5}px`;
+
+        if (state.c1.cloud >= 100) {
+          canvas.removeEventListener('click', clickHandler);
+          triggerRainVictory();
+        }
+      };
+      canvas.addEventListener('click', clickHandler);
+    }
+
+    function triggerRainVictory() {
+      state.c1.phase = 'victory';
+      audio.playDrop(400);
+      unlockBadge('platier');
+
+      const overlay = document.getElementById('c1-overlay');
+      overlay.style.display = 'flex';
+      overlay.innerHTML = `
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌧️</div>
+        <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 0.5rem;">Pluie sur le Pays Cauchois !</h3>
+        <p style="font-size: 0.85rem; color: #cbd5e1; max-width: 380px; margin-bottom: 1.5rem;">
+          Les micro-gouttelettes se sont rassemblées : la précipitation s'est déclenchée. Gouttelette tombe maintenant sur la terre normande et rejoint le cours de l'Arques !
+        </p>
+        <button class="btn-primary" onclick="switchScreen('chapter2')">Passer au Chapitre 2 ➔</button>
+      `;
+    }
+
+    function handleC1Move(e) {
+      if (state.c1.phase === 'intro' || state.c1.phase === 'victory') return;
+      const rect = document.getElementById('c1-canvas').getBoundingClientRect();
+      const x = Math.max(10, Math.min(90, ((e.clientX - rect.left) / rect.width) * 100));
+      const y = Math.max(15, Math.min(85, ((e.clientY - rect.top) / rect.height) * 100));
+      const drop = document.getElementById('c1-droplet');
+      drop.style.left = `${x}%`;
+      drop.style.top = `${y}%`;
+    }
+
+    function handleC1Touch(e) {
+      if (!e.touches[0]) return;
+      handleC1Move(e.touches[0]);
+    }
+
+    // --- 5. Chapter 2 Mechanics ---
+    function stepSoil(layer) {
+      audio.playDrop(500);
+      if (layer === 'humus') {
+        state.c2.depth = 35;
+        state.c2.purity = 65;
+        document.getElementById('c2-droplet').style.top = '45%';
+        document.getElementById('c2-btn-humus').style.background = '#064e3b';
+        document.getElementById('c2-btn-humus').textContent = '🍂 Humus traversé ✓';
+        document.getElementById('c2-btn-craie').disabled = false;
+        document.getElementById('c2-btn-craie').style.opacity = '1';
+      } else if (layer === 'craie') {
+        state.c2.depth = 70;
+        state.c2.purity = 90;
+        document.getElementById('c2-droplet').style.top = '65%';
+        document.getElementById('c2-btn-craie').style.background = '#0e7490';
+        document.getElementById('c2-btn-craie').textContent = '⚪ Craie calcaire traversée ✓';
+        document.getElementById('c2-btn-nappe').disabled = false;
+        document.getElementById('c2-btn-nappe').style.opacity = '1';
+      } else if (layer === 'nappe') {
+        state.c2.depth = 100;
+        state.c2.purity = 100;
+        document.getElementById('c2-droplet').style.top = '85%';
+        document.getElementById('c2-soil-interactive').style.display = 'none';
+        startRiverDescent();
+      }
+      document.getElementById('c2-purity-label').textContent = `Pureté : ${state.c2.purity}%`;
+    }
+
+    function startRiverDescent() {
+      audio.playChime();
+      document.getElementById('c2-phase-indicator').innerHTML = '<span>Phase 2 : Descente de la rivière l\'Arques 🐟</span>';
+      document.getElementById('c2-hud-title').textContent = 'Parcours Fluvial';
+
+      let dist = 0;
+      const interval = setInterval(() => {
+        dist += 4;
+        state.c2.distance = dist;
+        document.getElementById('c2-hud-val').textContent = `${dist}%`;
+        document.getElementById('c2-hud-bar').style.width = `${dist}%`;
+
+        if (dist % 20 === 0) audio.playDrop(800);
+
+        if (dist >= 100) {
+          clearInterval(interval);
+          unlockBadge('arques');
+          const overlay = document.getElementById('c2-overlay');
+          overlay.style.display = 'flex';
+          overlay.innerHTML = `
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🌿</div>
+            <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 0.5rem;">L'Arques a rejoint Dieppe !</h3>
+            <p style="font-size: 0.85rem; color: #cbd5e1; max-width: 380px; margin-bottom: 1.5rem;">
+              Filtrée par la craie et rafraîchie par les saules de la ripisylve, Gouttelette arrive dans l'estuaire du port de Dieppe, prête à retrouver la mer !
+            </p>
+            <button class="btn-primary" onclick="switchScreen('chapter3')">Passer au Chapitre 3 ➔</button>
+          `;
+        }
+      }, 150);
+    }
+
+    function handleC2Move(e) {
+      const rect = document.getElementById('c2-canvas').getBoundingClientRect();
+      const x = Math.max(10, Math.min(90, ((e.clientX - rect.left) / rect.width) * 100));
+      const drop = document.getElementById('c2-droplet');
+      drop.style.left = `${x}%`;
+    }
+    function handleC2Touch(e) {
+      if (!e.touches[0]) return;
+      handleC2Move(e.touches[0]);
+    }
+
+    // --- 6. Chapter 3 Mechanics ---
+    function mixEstuary() {
+      audio.playDrop(400);
+      document.getElementById('c3-overlay').style.display = 'none';
+      document.getElementById('c3-phase-indicator').innerHTML = '<span>Phase 2 : Immersion & Bioluminescence ✨</span>';
+
+      let sal = 0;
+      const interval = setInterval(() => {
+        sal += 5;
+        document.getElementById('c3-salinity-label').textContent = `Salinité : ${sal} g/L`;
+        audio.playDrop(350 + sal * 10);
+        if (sal >= 35) {
+          clearInterval(interval);
+          spawnDeepSeaPlankton();
+        }
+      }, 150);
+    }
+
+    function spawnDeepSeaPlankton() {
+      const layer = document.getElementById('c3-plankton-layer');
+      layer.innerHTML = '';
+      for (let i = 0; i < 12; i++) {
+        const dot = document.createElement('div');
+        dot.style.position = 'absolute';
+        dot.style.left = `${15 + Math.random() * 70}%`;
+        dot.style.top = `${20 + Math.random() * 60}%`;
+        dot.style.width = '24px';
+        dot.style.height = '24px';
+        dot.style.borderRadius = '50%';
+        dot.style.background = 'rgba(129, 140, 248, 0.25)';
+        dot.style.border = '1px solid rgba(129, 140, 248, 0.5)';
+        dot.style.display = 'flex';
+        dot.style.alignItems = 'center';
+        dot.style.justifyContent = 'center';
+        dot.style.fontSize = '12px';
+        dot.textContent = i % 2 === 0 ? '🔬' : '✨';
+        dot.style.cursor = 'pointer';
+        dot.dataset.lit = 'false';
+
+        dot.addEventListener('mouseenter', () => lightPlankton(dot));
+        dot.addEventListener('click', () => lightPlankton(dot));
+        layer.appendChild(dot);
+      }
+    }
+
+    function lightPlankton(dot) {
+      if (dot.dataset.lit === 'true') return;
+      dot.dataset.lit = 'true';
+      audio.playBiolum();
+      dot.style.background = 'var(--cyan-bright)';
+      dot.style.boxShadow = '0 0 20px var(--cyan-bright)';
+      dot.style.borderColor = '#fff';
+      dot.style.transform = 'scale(1.3)';
+
+      state.c3.litPlankton += 1;
+      document.getElementById('c3-hud-val').textContent = `${state.c3.litPlankton} / 12`;
+      document.getElementById('c3-hud-bar').style.width = `${(state.c3.litPlankton / 12) * 100}%`;
+
+      if (state.c3.litPlankton >= 12) {
+        unlockBadge('manche');
+        const overlay = document.getElementById('c3-overlay');
+        overlay.style.display = 'flex';
+        overlay.innerHTML = `
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">✨ 🌊</div>
+          <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 0.5rem;">Le Cycle est Bouclé !</h3>
+          <p style="font-size: 0.85rem; color: #cbd5e1; max-width: 380px; margin-bottom: 1.5rem;">
+            Tu as réveillé la chaîne alimentaire marine de Dieppe ! Grâce aux rayons du soleil, cette eau s'évaporera à nouveau : <strong>le grand cycle ne s'arrête jamais</strong>.
+          </p>
+          <button class="btn-primary" onclick="switchScreen('diagram')">Compléter le Schéma du Cycle ➔</button>
+        `;
+      }
+    }
+
+    function handleC3Move(e) {
+      const rect = document.getElementById('c3-canvas').getBoundingClientRect();
+      const x = Math.max(10, Math.min(90, ((e.clientX - rect.left) / rect.width) * 100));
+      const y = Math.max(15, Math.min(85, ((e.clientY - rect.top) / rect.height) * 100));
+      const drop = document.getElementById('c3-droplet');
+      drop.style.left = `${x}%`;
+      drop.style.top = `${y}%`;
+    }
+    function handleC3Touch(e) {
+      if (!e.touches[0]) return;
+      handleC3Move(e.touches[0]);
+    }
+
+    // --- 7. Interactive Panoramic Cycle Diagram ---
+    const DIAGRAM_STEPS = {
+      evaporation: { label: '1. Évaporation', target: 'evaporation', path: 'path-evap' },
+      condensation: { label: '2. Condensation', target: 'condensation', path: 'path-prec' },
+      precipitation: { label: '3. Précipitation', target: 'precipitation', path: 'path-prec' },
+      infiltration: { label: '4. Infiltration', target: 'infiltration', path: 'path-infil' },
+      ruissellement: { label: '5. Rivière l\'Arques', target: 'ruissellement', path: 'path-ruiss' },
+      ocean_return: { label: '6. Mer & Plancton', target: 'ocean_return', path: 'path-ocean' }
+    };
+
+    function selectChip(stepId) {
+      audio.playDrop(700);
+      state.selectedChip = stepId;
+      document.querySelectorAll('.step-chip').forEach(c => c.classList.remove('selected'));
+      const chip = document.getElementById(`chip-${stepId.substring(0, 4)}`);
+      if (chip) chip.classList.add('selected');
+    }
+
+    function clickTarget(targetId) {
+      if (!state.selectedChip) return;
+      if (DIAGRAM_STEPS[state.selectedChip].target === targetId) {
+        audio.playChime();
+        state.diagramPlaced[state.selectedChip] = true;
+
+        // Visual target update
+        const targetEl = document.getElementById(`target-${targetId}`);
+        targetEl.className = 'target-validated';
+        targetEl.textContent = `${DIAGRAM_STEPS[state.selectedChip].label} ✓`;
+
+        // Highlight SVG path
+        const pathEl = document.getElementById(DIAGRAM_STEPS[state.selectedChip].path);
+        if (pathEl) pathEl.style.opacity = '1';
+
+        // Hide chip
+        const chip = document.getElementById(`chip-${state.selectedChip.substring(0, 4)}`);
+        if (chip) chip.style.display = 'none';
+
+        state.selectedChip = null;
+
+        // Check completion
+        const count = Object.values(state.diagramPlaced).filter(Boolean).length;
+        document.getElementById('diagram-score').textContent = `${count} / 6`;
+        if (count === 6) {
+          fireConfetti();
+        }
+      } else {
+        audio.playDrop(300);
+      }
+    }
+
+    function resetDiagram() {
+      audio.playDrop(400);
+      Object.keys(state.diagramPlaced).forEach(k => {
+        state.diagramPlaced[k] = false;
+        const targetEl = document.getElementById(`target-${DIAGRAM_STEPS[k].target}`);
+        targetEl.className = 'target-circle';
+        targetEl.textContent = '?';
+        const pathEl = document.getElementById(DIAGRAM_STEPS[k].path);
+        if (pathEl) pathEl.style.opacity = '0.2';
+      });
+      document.querySelectorAll('.chips-tray .step-chip').forEach(c => c.style.display = 'flex');
+      document.getElementById('diagram-score').textContent = '0 / 6';
+    }
+
+    // --- 8. CM2 Quiz ---
+    const QUIZ_DATA = [
+      {
+        q: "Lors de l'évaporation sur le platier de Dieppe, quel changement d'état subit l'eau ?",
+        concept: "Changements d'état",
+        options: [
+          "De l'état solide à l'état liquide",
+          "De l'état liquide à l'état gazeux (vapeur d'eau)",
+          "De l'état liquide à l'état solide",
+          "Elle ne change pas d'état"
+        ],
+        answer: 1,
+        exp: "Sous l'action de la chaleur du soleil, l'eau liquide s'agite et se transforme en vapeur invisible : c'est l'évaporation !"
+      },
+      {
+        q: "Qu'est-ce que le 'platier rocheux' visible à marée basse à Dieppe ?",
+        concept: "Milieu littoral",
+        options: [
+          "Une vaste étendue rocheuse et calcaire découverte à marée basse",
+          "Une digue en béton construite pour les bateaux",
+          "Une île artificielle",
+          "Une forêt de sapins sous-marine"
+        ],
+        answer: 0,
+        exp: "Le platier est la surface rocheuse naturelle creusée de mares au pied des falaises de craie du Pays de Caux."
+      },
+      {
+        q: "Quel est le rôle vital de la 'ripisylve' le long de la rivière l'Arques ?",
+        concept: "Écologie fluviale",
+        options: [
+          "Elle assèche la rivière en buvant toute l'eau",
+          "Elle maintient les berges, apporte de l'ombre fraîche et filtre naturellement l'eau",
+          "Elle empêche les poissons de nager",
+          "Elle produit du plastique"
+        ],
+        answer: 1,
+        exp: "Les saules et aulnes de la ripisylve stabilisent le sol avec leurs racines et empêchent la rivière de surchauffer l'été !"
+      },
+      {
+        q: "Pourquoi la larve d'éphémère est-elle appelée une espèce 'bio-indicatrice' ?",
+        concept: "Qualité de l'eau",
+        options: [
+          "Elle ne survit que dans une eau pure et riche en oxygène",
+          "Elle change de couleur la nuit",
+          "Elle mange les déchets des promeneurs",
+          "Elle indique l'heure de la marée"
+        ],
+        answer: 0,
+        exp: "Très fragile, la larve d'éphémère disparaît dès la moindre pollution : sa présence garantit une eau limpide et saine !"
+      },
+      {
+        q: "Quelle est la contribution majeure du phytoplancton dans la Manche ?",
+        concept: "Climat & Océans",
+        options: [
+          "Il produit plus de 50% de l'oxygène de la Terre grâce à la photosynthèse",
+          "Il chauffe l'eau pour les baigneurs",
+          "Il fabrique le sel marin",
+          "Il détruit les rochers"
+        ],
+        answer: 0,
+        exp: "Le phytoplancton est le véritable poumon bleu de notre planète : une respiration sur deux lui est due !"
+      }
+    ];
+
+    function renderQuiz() {
+      const q = QUIZ_DATA[state.quizIndex];
+      document.getElementById('quiz-question-num').textContent = `Question ${state.quizIndex + 1} sur ${QUIZ_DATA.length}`;
+      document.getElementById('quiz-concept-tag').textContent = q.concept;
+      document.getElementById('quiz-question-text').textContent = q.q;
+
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+      document.getElementById('quiz-explanation').style.display = 'none';
+      document.getElementById('quiz-next-btn').style.display = 'none';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'step-chip';
+        btn.style.width = '100%';
+        btn.style.justifyContent = 'flex-start';
+        btn.innerHTML = `<span style="font-family: var(--font-mono); font-weight: bold; width: 22px;">${String.fromCharCode(65 + idx)}.</span> <span>${opt}</span>`;
+        btn.onclick = () => selectQuizAnswer(idx, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectQuizAnswer(idx, btn) {
+      const q = QUIZ_DATA[state.quizIndex];
+      const buttons = document.querySelectorAll('#quiz-options-container button');
+      buttons.forEach(b => b.onclick = null);
+
+      if (idx === q.answer) {
+        audio.playChime();
+        btn.style.background = '#064e3b';
+        btn.style.borderColor = 'var(--emerald-bright)';
+        state.quizScore += 1;
+      } else {
+        audio.playDrop(300);
+        btn.style.background = '#881337';
+        btn.style.borderColor = 'var(--rose-bright)';
+        buttons[q.answer].style.background = '#064e3b';
+      }
+
+      const exp = document.getElementById('quiz-explanation');
+      exp.style.display = 'block';
+      exp.innerHTML = `<strong>💡 Explication :</strong> ${q.exp}`;
+      document.getElementById('quiz-next-btn').style.display = 'inline-flex';
+    }
+
+    function nextQuizQuestion() {
+      audio.playDrop(750);
+      state.quizIndex += 1;
+      if (state.quizIndex < QUIZ_DATA.length) {
+        renderQuiz();
+      } else {
+        // Quiz completed
+        fireConfetti();
+        document.getElementById('screen-quiz').innerHTML = `
+          <div style="max-width: 580px; margin: 3rem auto; text-align: center; background: var(--bg-surface); padding: 2.5rem; border-radius: 24px; border: 1px solid var(--border-color);">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎉</div>
+            <h2 style="color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem;">Quizz Terminé !</h2>
+            <div style="font-size: 1.3rem; font-weight: bold; color: var(--cyan-bright); margin-bottom: 1rem;">
+              Score : ${state.quizScore} / ${QUIZ_DATA.length}
+            </div>
+            <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 1.5rem;">
+              Bravo pour ton engagement naturaliste ! Tu as acquis les connaissances essentielles sur le cycle de l'eau cauchois.
+            </p>
+            <button class="btn-primary" onclick="switchScreen('diploma')">Imprimer mon Diplôme d'Éco-Citoyen ➔</button>
+          </div>
+        `;
+      }
+    }
+    renderQuiz();
+
+    // --- 9. Species Fact Data ---
+    const SPECIES_FACTS = {
+      anemone: {
+        name: "Anémone Tomate",
+        latin: "Actinia equina",
+        icon: "🔴",
+        body: "Fixée sur les rochers de craie du platier, elle rétracte ses tentacules urticants à marée basse pour former une boule gélatineuse rouge qui conserve son eau.",
+        anecdote: "Elle ressemble à une fraise ou une petite tomate luisante hors de l'eau !"
+      },
+      crevette: {
+        name: "Crevette Bouquet",
+        latin: "Palaemon serratus",
+        icon: "🦐",
+        body: "Parfaitement transparente pour échapper aux prédateurs, elle arpente le fond des cuvettes rocheuses du platier de Dieppe.",
+        anecdote: "Ses longues antennes lui permettent de détecter les vibrations des vagues et des poissons !"
+      },
+      fucus: {
+        name: "Fucus Vésiculeux",
+        latin: "Fucus vesiculosus",
+        icon: "🌿",
+        body: "Algue brune munie de petits flotteurs gazeux. À marée basse, elle forme une couverture humide protectrice pour la faune marine.",
+        anecdote: "Ses vésicules lui permettent de flotter droit vers la lumière du soleil à marée haute !"
+      },
+      truite: {
+        name: "Truite Fario",
+        latin: "Salmo trutta fario",
+        icon: "🐟",
+        body: "Poisson emblématique de la rivière l'Arques. Elle exige une eau fraîche, très riche en oxygène et sans aucune pollution.",
+        anecdote: "Elle peut remonter le courant vif d'un coup de nageoire pour chasser les insectes au ras de l'eau !"
+      },
+      calopteryx: {
+        name: "Calopteryx Éclatant",
+        latin: "Calopteryx splendens",
+        icon: "🦋",
+        body: "Libellule aux ailes bleu métallique sombre qui patrouille sous le couvert végétal des saules et aulnes de la ripisylve de l'Arques.",
+        anecdote: "Sa présence prouve que les berges sont bien ombragées et en excellente santé écologique !"
+      },
+      ephemere: {
+        name: "Larve d'Éphémère",
+        latin: "Ephemeroptera",
+        icon: "🪲",
+        body: "Petite créature tapie sous les galets de silex de l'Arques. Ses branchies ultra-sensibles ne supportent aucune impureté chimique.",
+        anecdote: "C'est le bio-indicateur roi utilisé par les gardes-rivières d'Eco2 Nature !"
+      },
+      diatomee: {
+        name: "Diatomée (Phytoplancton)",
+        latin: "Bacillariophyceae",
+        icon: "🔬",
+        body: "Micro-algue enveloppée d'une coque en verre de silice naturelle. Elle flotte dans les courants de la Manche et réalise la photosynthèse.",
+        anecdote: "Plus d'une molécule d'oxygène sur deux que tu respires provient de ces micro-algues marines !"
+      },
+      copepode: {
+        name: "Copépode (Zooplancton)",
+        latin: "Copepoda",
+        icon: "🦐",
+        body: "Minuscule crustacé planctonique qui se nourrit de diatomées et sert de nourriture de base aux bancs de poissons de Dieppe.",
+        anecdote: "Par rapport à sa taille (1 mm), c'est l'un des animaux les plus puissants de l'océan !"
+      },
+      hareng: {
+        name: "Hareng Dieppois",
+        latin: "Clupea harengus",
+        icon: "🐟",
+        body: "Poisson pélagique vivant en bancs serrés dans la Manche. Symbole historique de la cité maritime aux quatre ports.",
+        anecdote: "Chaque automne à Dieppe, la grande Foire aux Harengs célèbre cette ressource marine séculaire !"
+      }
+    };
+
+    function showFact(id) {
+      const f = SPECIES_FACTS[id];
+      if (!f) return;
+      audio.playDrop(850);
+      document.getElementById('fact-icon').textContent = f.icon;
+      document.getElementById('fact-title').textContent = f.name;
+      document.getElementById('fact-latin').textContent = f.latin;
+      document.getElementById('fact-body').textContent = f.body;
+      document.getElementById('fact-anecdote').textContent = `💡 Le saviez-vous ? ${f.anecdote}`;
+      document.getElementById('fact-modal').style.display = 'flex';
+    }
+
+    function closeFactModal() {
+      document.getElementById('fact-modal').style.display = 'none';
+      audio.playDrop(600);
+    }
+
+    // Set today's date on diploma
+    document.getElementById('diploma-date').textContent = new Date().toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  </script>
+</body>
+</html>
